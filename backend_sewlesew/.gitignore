@@ -13,6 +13,9 @@ delete.js
 .env.production.local
 .swp
 .env.swp
+.swo
+.env.swo
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
