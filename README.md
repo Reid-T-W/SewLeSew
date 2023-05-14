@@ -1,4 +1,4 @@
-# WEGENE  
+# SewLeSew 
 ## Introduction  
 WEGENE is an app that helps us support each other, its a funding platform that is inspired by GoFundMe, the main difference being that, WEGENE uses a local digital payment 
 system.  
