@@ -27,7 +27,9 @@ const Login = () => {
         setSessionToken,
         setEmail,
         setFirstName,
-        setLastName } = useDynamic();
+        setLastName,
+        profilePic,
+        setProfilePic } = useDynamic();
 
     const loginUser = async() => {
         const url = 'http://localhost:5000/api/v1/login';
@@ -44,6 +46,7 @@ const Login = () => {
             setFirstName(response.userData.firstName);
             setLastName(response.userData.lastName);
             setEmail(response.userData.email);
+            setProfilePic(response.userData.profilePic)
             navigateToPostsFeed();
             // Redirect to postfeeds page
             // const history = useHistory();

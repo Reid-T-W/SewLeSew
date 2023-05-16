@@ -16,6 +16,8 @@ import { useDynamic } from '../contexts/DynamicContext';
 import { getToLogoutAPI } from '../utils/getToLogoutAPI'
 import { toast } from 'react-toastify';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import { Avatar } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 const Navbar = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -30,7 +32,8 @@ const Navbar = () => {
           sessionToken,
           setSessionToken,
           setUsername,
-          username
+          username,
+          profilePic
         } = useDynamic();
   
   // Retrieving from session storage
@@ -48,6 +51,12 @@ const Navbar = () => {
   useEffect(() => {
     sessionStorage.setItem('isLoggedIn', isLoggedIn);
   }, [isLoggedIn]);
+
+  const theme = createTheme({
+    zIndex: {
+      drawer: 1000,
+    },
+  });
 
   const renderLoggedInCompnents = () => {
     if (isLoggedIn) {
@@ -109,7 +118,11 @@ const dynamicNavLink = () => {
         <Button onClick={ logoutUser } color="inherit">
           <NavLink style={navLinkStyle}>Logout</NavLink>
         </Button>
-        <Typography>{`Welcome ${username}`}</Typography>
+        {/* <Typography>{`Welcome ${username}`}</Typography> */}
+        {profilePic ? 
+          <Avatar>{username.slice(0, 2).toUpperCase()}</Avatar> :
+          <Avatar sx={{ bgcolor: "#9c27b0" }}>{username.slice(0, 2).toUpperCase()}</Avatar>
+        }
       </>
     )} else {
     return (
@@ -130,10 +143,10 @@ const displayNotificationCount = () => {
     )
   }
 }
-  const navLinkStyle = {color: 'white', textDecoration: 'none'}
+  const navLinkStyle = {color: '#9c27b0', textDecoration: 'none'}
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='sticky'>
+    <Box class='sticky' sx={{ flexGrow: 1 }}>
+      <AppBar color='inherit'>
         <Toolbar>
           {/* <IconButton
             size="large"
@@ -145,30 +158,36 @@ const displayNotificationCount = () => {
             <MenuIcon />
           </IconButton> */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <span class="logo" >WE</span>
-            <span id="logo_color" class="logo">GENE</span>
+            <span class="color logo" >Sew</span>
+            <span class="gray-color logo" >Le</span>
+            <span class="color logo">Sew</span>
           </Typography>
           {/* <Button color="inherit" onClick={ resetUnreadCount }><ChatIcon /></Button> */}
-          <Button color="inherit" onClick={ createPost }>
-            <AddCircleOutlinedIcon />
-          </Button>
+          {isLoggedIn ? 
+            <Button color="secondary" onClick={ createPost }>
+              <AddCircleOutlinedIcon />
+            </Button> : ""
+          }
           {/* <Button onClick={ resetNotificationsCount }color="inherit">
             <NotificationsIcon />
           </Button> */}
           
-          <Button onClick={()=>{resetPendingdonationsCount()}}color="inherit">
-            <NavLink style={navLinkStyle} to='/userpendingdonations'> 
-              <VolunteerActivismIcon />
-            </NavLink>
-            { displayNotificationCount() }
-          </Button>
+          {isLoggedIn ? 
+            <Button onClick={()=>{resetPendingdonationsCount()}}>
+              <NavLink style={navLinkStyle} to='/userpendingdonations'> 
+                <VolunteerActivismIcon color="secondary"/>
+              </NavLink>
+              { displayNotificationCount() }
+            </Button> : ""
+          }
           
-          <Button color="inherit">
+          <Button color="secondary">
             <NavLink style={navLinkStyle} to='/'> Posts </NavLink>
           </Button>
-          <Button color="inherit">
-            <NavLink style={navLinkStyle} to='/userdonations'> Profile </NavLink>
-          </Button>
+          {isLoggedIn ? 
+            <Button>
+              <NavLink style={navLinkStyle} to='/userdonations'> Profile </NavLink>
+            </Button> : ""}
           {/* {renderLoggedInCompnents() } */}
             { dynamicNavLink() }
         </Toolbar>

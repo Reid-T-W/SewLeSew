@@ -13,9 +13,9 @@ const Home = () => {
         marginTop='20px'
         // style={{ minHeight: '100vh' }}
       >
-        {/* <Box width= '500px' mt= '20px'> */}
-        {/* <SearchBar /> */}
-        {/* </Box> */}
+        <Box>
+          <SearchBar />
+        </Box>
       </Grid>
       <Grid
         container

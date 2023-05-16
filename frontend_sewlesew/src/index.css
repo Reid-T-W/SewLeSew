@@ -10,9 +10,27 @@
 .logo {
   font-weight: bold;
 }
-#logo_color {
-  color: #5800FF;
+.color {
+  /* color: #5800FF; */
+  color: #9c27b0;
 }
+.gray-color {
+  /* color: #5800FF; */
+  color: gray;
+}
+
+.sticky {
+  position: 'sticky';
+  top: 0;
+  z-Index: 100;
+}
+
+.footer {
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+}
+
 /* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -64,6 +82,9 @@ code {
   padding: 0 1px;
 }
 
+.no-underline {
+  text-decoration: none;
+}
 
 
 

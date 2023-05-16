@@ -20,7 +20,9 @@ export const DynamicContextProvider = ({ children }) => {
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [profilePic, setProfilePic] = useState('');
     const [role, setRole] = useState('User');
+    const [searchTerm, setSearchTerm] = useState('');
 
     // Posts
     const postsFromSessionStorage = sessionStorage.getItem('posts')
@@ -122,7 +124,11 @@ export const DynamicContextProvider = ({ children }) => {
         documentNewPost,
         setDocumentNewPost,
         postDetails,
-        setPostDetails
+        setPostDetails,
+        profilePic,
+        setProfilePic,
+        searchTerm,
+        setSearchTerm
     };
     
     return (

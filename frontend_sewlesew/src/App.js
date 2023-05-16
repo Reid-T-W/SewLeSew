@@ -13,7 +13,8 @@ import { Home,
          PostUploadForm,
          Usereditprofile,
          VerifyPayment,
-         PaymentSuccess
+         PaymentSuccess,
+         BottomNav
          } from './components';
 import { DynamicContextProvider } from "./contexts/DynamicContext";
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,13 +23,13 @@ import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <DynamicContextProvider>
-      <ToastContainer 
+      {/* <ToastContainer 
         position="top-center"
         closeOnClick
-      />
+      /> */}
       <BrowserRouter>
-      <Box sx={{ backgroundColor: '#FFFFFF' }}>
-          <Navbar />
+      <Navbar/>
+      <Box sx={{ backgroundColor: '#FFFFFF', mt: "100px"}}>
           <Routes>
               <Route path="/" exact element={<Home />} />
               <Route path="/posts/:id" element={<Postdetail />} />
@@ -48,6 +49,7 @@ function App() {
               <Route path="/search/:searchTerm" element={<SearchFeed />} /> */}
           </Routes> 
       </Box>
+      <BottomNav />
       </BrowserRouter>
     </DynamicContextProvider>
   );

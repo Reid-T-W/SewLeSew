@@ -24,3 +24,4 @@ export { default as ImageUpload } from './ImageUpload';
 export { default as EditProfile } from './EditProfile';
 export { default as VerifyPayment } from './VerifyPayment';
 export { default as PaymentSuccess } from './PaymentSuccess';
+export { default as BottomNav } from './BottomNav.jsx';

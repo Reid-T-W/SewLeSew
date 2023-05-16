@@ -7,7 +7,7 @@ const Filters = () => {
   return (
     <Box p={2} sx={{ overflow: 'auto', height: '90vh',
     flex: 2}}>
-        <FormGroup row='false'>
+        <FormGroup row='false' sx={{ color: 'gray' }}>
             <FormControlLabel control={<Checkbox />} label="Medical Cases" />
             <FormControlLabel control={<Checkbox />} label="Housing Cases" />
             <FormControlLabel control={<Checkbox />} label="Elderly Support" />
