@@ -23,6 +23,7 @@ export const DynamicContextProvider = ({ children }) => {
     const [profilePic, setProfilePic] = useState('');
     const [role, setRole] = useState('User');
     const [searchTerm, setSearchTerm] = useState('');
+    const [files, setFiles] = useState([])
 
     // Posts
     const postsFromSessionStorage = sessionStorage.getItem('posts')
@@ -31,7 +32,7 @@ export const DynamicContextProvider = ({ children }) => {
 
     // PostDetails
     const postDetailsFromSessionStorage = sessionStorage.getItem('postDetails')
-    const [postDetails, setPostDetails] = useState(postDetailsFromSessionStorage? JSON.parse(postDetailsFromSessionStorage):{});
+    const [postDetails, setPostDetails] = useState(postDetailsFromSessionStorage? JSON.parse(postDetailsFromSessionStorage):[]);
 
     // User
     const userDonationsFromSessionStorage = sessionStorage.getItem('userDonations')
@@ -128,7 +129,9 @@ export const DynamicContextProvider = ({ children }) => {
         profilePic,
         setProfilePic,
         searchTerm,
-        setSearchTerm
+        setSearchTerm,
+        files,
+        setFiles
     };
     
     return (

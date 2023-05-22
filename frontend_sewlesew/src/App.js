@@ -14,7 +14,8 @@ import { Home,
          Usereditprofile,
          VerifyPayment,
          PaymentSuccess,
-         BottomNav
+         BottomNav,
+         DeleteParent
          } from './components';
 import { DynamicContextProvider } from "./contexts/DynamicContext";
 import 'react-toastify/dist/ReactToastify.css';

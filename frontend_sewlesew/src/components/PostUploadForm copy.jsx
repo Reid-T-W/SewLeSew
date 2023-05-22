@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid,Paper, TextField, 
   Button, Stack } from'@mui/material'
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { MultipleOptions, ImageUpload, Dropzone } from './';
+import { MultipleOptions, ImageUpload } from './';
 import { useDynamic } from '../contexts/DynamicContext';
 import { postProductToAPI } from '../utils/postProductToAPI';
 import { toast } from 'react-toastify';
@@ -69,18 +69,15 @@ const PostUploadForm = () => {
                 <MultipleOptions onChange={(e)=>{setCategoryNewPost(e.target.value)}} category="Category" options={options}/>
                 <Grid  alignItems="center" justifyContent="center">
                   <Stack direction="column" spacing={4}>
-                    <section>
-                      <div>
-                        <h1>Upload Files</h1>
-                        <Dropzone/>
-                      </div>
-                    </section>
-                    {/* <ImageUpload message="Upload an image ..."/>
+                    <ImageUpload message="Upload an image ..."/>
                     <ImageUpload message="Upload a video ..."/>
-                    <ImageUpload message="Upload a document ..."/> */}
+                    <ImageUpload message="Upload a document ..."/>
                   </Stack>
                 </Grid>
                 <Button onClick={uploadForm} type='submit' color='primary' variant="contained" style={btn} fullWidth>Post</Button>
+                <a className="developed_by" href="https://upload.io/uploader" target="_blank">
+                  Powered by Upload.io
+                </a>
             </Stack>
         </Paper>
     </Grid>

@@ -7,6 +7,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* .close-button {
+  background: 'None';
+  color: '#9c27b0';
+  border: 'None';
+  border-radius: '10px'
+} */
+
 .logo {
   font-weight: bold;
 }
@@ -84,6 +92,16 @@ code {
 
 .no-underline {
   text-decoration: none;
+}
+
+.upload-container {
+  display: flex;
+  border: dashed 1px;
+  border-radius: 10px;
+  color: gray;
+  justify-content: center;
+  padding: 60px;
+  margin-top: 8px;
 }
 
 

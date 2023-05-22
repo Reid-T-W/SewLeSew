@@ -1,24 +1,11 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Typography, Card, CardContent, CardMedia, Box, Stack } from '@mui/material';
-import { CheckCircle } from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useDynamic } from '../contexts/DynamicContext';
 import { currencyFormat } from '../utils/currencyFormatter';
-
-import { demoThumbnailUrl, demoVideoUrl, demoVideoTitle,
-demoChannelUrl, demoChannelTitle } from '../utils/constants';
+import { donationProgress } from '../utils/donationProgressCalc';
 
 const Postcard = ({id, post}) => {
   // Importing states
-  const {
-    posts
-  } = useDynamic();
-
-  const donationProgress = () => {
-    const value = (post.totalRaised / post.amount) * 100;
-    return value;
-  }
-
   return (
       <Card sx={{ width: { sm:'358px', md: '320px', xs: '100%' },
       boxShadow: 'none', borderRadius: '20px', backgroundColor: 'white',
@@ -50,7 +37,7 @@ const Postcard = ({id, post}) => {
             </Typography>
           </Stack> 
           <Box sx={{ width: '80%', marginBottom: '20px', marginRight: 'auto', marginLeft: 'auto'}}>
-            <LinearProgress sx={{ borderRadius:'5px'}} variant='determinate' value={donationProgress()} color='secondary' />
+            <LinearProgress sx={{ borderRadius:'5px'}} variant='determinate' value={donationProgress(post.totalRaised, post.amount)} color='secondary' />
           </Box>
       </Card>
   )

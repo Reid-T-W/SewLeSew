@@ -13,12 +13,14 @@
     "react-bootstrap": "^2.7.3",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hot-toast": "^2.4.0",
     "react-player": "^2.10.1",
     "react-router-dom": "^6.10.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^9.1.2",
-    "react-uploader": "^3.19.0"
+    "react-uploader": "^3.19.0",
+    "react-window": "^1.8.9"
   },
   "scripts": {
     "start": "react-scripts start",
