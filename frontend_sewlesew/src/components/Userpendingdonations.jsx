@@ -18,10 +18,11 @@ const Userpendingdonations = () => {
     sessionToken
     } = useDynamic();
   const navigate = useNavigate();
-  // Saving userDonations to session storage
-  useEffect(() => {
-    sessionStorage.setItem('userPendingDonations', JSON.stringify(userPendingDonations));
-  }, [userPendingDonations]);
+
+  // // Saving userDonations to session storage
+  // useEffect(() => {
+  //   sessionStorage.setItem('userPendingDonations', JSON.stringify(userPendingDonations));
+  // }, [userPendingDonations]);
 
   useEffect(() => {
     sessionStorage.setItem('pendingdonationsCount', JSON.stringify(pendingdonationsCount));
@@ -75,26 +76,38 @@ const Userpendingdonations = () => {
         // Make api call to backend
         const url = 'http://localhost:5000/api/v1/payViaChapa';
         const headers = {"session_id": sessionToken};
+        console.log("email", email)
+        console.log("firstName", firstName)
+        console.log("lastName", lastName)
+        console.log("totalPendingDonations", totalPendingDonations)
         const data = {
           email,
           firstName,
           lastName,
           totalPendingDonations,
         }
+
+        // // Delete the line below, only for testing purpose
+        // transferPendingDonationsToDonations();
+
         return (await donateViaChapa(url, data, headers)
         .then((url)=>{
           if (url.data.status === 200) {
             // Add all pending donations to donations table
-            transferPendingDonationsToDonations();
+            // transferPendingDonationsToDonations();
             const checkoutUrl = url.data.data;
-            // console.log(checkoutUrl);
             window.location.replace(checkoutUrl)
-            // toast.success("Donation successful");
           }
         })
-        .catch((error) => {console.log(error)})
+        .catch((error) => {
+          console.log("In error")
+          console.log(error)
+        })
         //Execute the following when promise is resolved
       )
+
+
+      
     // // Sum items in the pending donations table and proceed to checkout
     // let totalPendingDonations = 0;
     // userPendingDonations.map((pendingDonation) => {totalPendingDonations += pendingDonation.amount})

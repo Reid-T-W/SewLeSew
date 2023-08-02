@@ -12,9 +12,11 @@ const EnterDonationsBox = ({postId}) => {
 const { isLoggedIn,
     postDetails,
     incrementPendingdonationsCount,
-    sessionToken  } = useDynamic();
-const [pendingDonationEntry, setPendingDonationEntry] = useState(0);
+    sessionToken,
+    setPendingDonationCounter,
+    pendingDonationCounter  } = useDynamic();
 
+const [pendingDonationEntry, setPendingDonationEntry] = useState(0);
 const apiCallToAddPendingDonation = async() => {
     const url = `http://localhost:5000/api/v1/posts/${postId}/pending-donations`;
     const data = { amount: pendingDonationEntry }
@@ -22,19 +24,25 @@ const apiCallToAddPendingDonation = async() => {
     return (await postPendingDonationToAPI(url, data, headers)
     .then((response) => {
         toast.success(response.data)
-        incrementPendingdonationsCount();
+        // incrementPendingdonationsCount();
+        
+        // Increment the pending donations counter
+        
     })
     .catch((error) => {
         toast.error(String(error));
     }))
 }
 
-const addToPendingDonations = () => {
+const addToPendingDonations = async () => {
   if (!isLoggedIn) {
     toast.error("You must be logged in to donate")
   }
   else {
-    apiCallToAddPendingDonation()
+    await apiCallToAddPendingDonation()
+    setPendingDonationCounter(pendingDonationCounter + 1);
+    console.log("In here")
+    console.log(pendingDonationCounter);
   }
 }
   return (

@@ -14,16 +14,28 @@ export const DynamicContextProvider = ({ children }) => {
     const [pendingdonationsCount, setPendingdonationsCount] = useState(pendingdonationsCountFromSessionStorage? JSON.parse(pendingdonationsCountFromSessionStorage):0);
     const [notificationsCount, setNotificationsCount] = useState(0);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [email, setEmail] = useState('');
+
+    const emailFromSessionStorage = sessionStorage.getItem('email')
+    const [email, setEmail] = useState(emailFromSessionStorage? emailFromSessionStorage : '');
+    
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [username, setUsername] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+
+    const usernameFromSessionStorage = sessionStorage.getItem('username');
+    const [username, setUsername] = useState(usernameFromSessionStorage? usernameFromSessionStorage : '');
+
+    const firstNameFromSessionStorage = sessionStorage.getItem('firstName');
+    const [firstName, setFirstName] = useState(firstNameFromSessionStorage? firstNameFromSessionStorage : '');
+    
+    const lastNameFromSessionStorage = sessionStorage.getItem('lastName');
+    const [lastName, setLastName] = useState(lastNameFromSessionStorage? lastNameFromSessionStorage : '');
+    
     const [profilePic, setProfilePic] = useState('');
+    
     const [role, setRole] = useState('User');
     const [searchTerm, setSearchTerm] = useState('');
-    const [files, setFiles] = useState([])
+    const [files, setFiles] = useState([]);
+    const [videoFiles, setVideoFiles] = useState([]);
 
     // Posts
     const postsFromSessionStorage = sessionStorage.getItem('posts')
@@ -50,7 +62,8 @@ export const DynamicContextProvider = ({ children }) => {
     const [imageNewPost, setImageNewPost] = useState('');
     const [videoNewPost, setVideoNewPost] = useState('');
     const [documentNewPost, setDocumentNewPost] = useState('');
-  
+    const [doners, setDoners] = useState([]);
+    const [pendingDonationCounter, setPendingDonationCounter] = useState(0);
     
     const resetUnreadCount = () => {
         setUnreadCount(0);
@@ -82,6 +95,7 @@ export const DynamicContextProvider = ({ children }) => {
         resetPendingdonationsCount,
         notificationsCount,
         resetNotificationsCount,
+        setNotificationsCount,
         unreadCount,
         resetUnreadCount,
         incrementPendingdonationsCount,
@@ -131,7 +145,13 @@ export const DynamicContextProvider = ({ children }) => {
         searchTerm,
         setSearchTerm,
         files,
-        setFiles
+        setFiles,
+        videoFiles,
+        setVideoFiles,
+        doners,
+        setDoners,
+        pendingDonationCounter,
+        setPendingDonationCounter,
     };
     
     return (

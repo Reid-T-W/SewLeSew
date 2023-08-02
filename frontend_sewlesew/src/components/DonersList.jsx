@@ -9,22 +9,50 @@ import Typography from '@mui/material/Typography';
 import { Doner } from '.';
 import { Box, ListItemButton } from '@mui/material';
 import { FixedSizeList } from 'react-window';
+import { useDynamic } from '../contexts/DynamicContext';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchFromAPI } from '../utils/fetchFromAPI';
+import { useState } from 'react';
 
 function renderRow(props) {
-  const { index, style } = props;
+  const { index, style, data } = props;
+  const doner = data.doners[index]
+
 
   return (
-    <ListItem style={style} key={index} component="div" disablePadding>
-      <ListItemButton>
+    <ListItem component="div" disablePadding>
+      {/* <ListItemButton> */}
         {/* <ListItemText primary={`Item ${index + 1}`} /> */}
-        <Doner />
-        <Divider variant="inset" component="li" />
-      </ListItemButton>
+        {/* {[1,2,3].forEach(doner => {
+            
+          }
+        )} */}
+        <Doner doner={doner}/>
+        {/* <Divider variant="inset" component="li" /> */}
+      {/* </ListItemButton> */}
     </ListItem>
   );
 }
 
 const DonersList = () => {
+  const { postDetails, setDoners, doners } = useDynamic();
+  const params = useParams();
+  const postId = params.id
+  useEffect(()=>{
+    // Make api call to get all donations
+    // for this post
+    const url = `http://localhost:5000/api/v1/posts/${postId}/donations`;
+    fetchFromAPI(url)
+    .then((doners)=>{
+      console.log("In doners list: ", doners)
+      setDoners(doners)
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+
+  },[])
   return (
     <Box
       sx={{ 
@@ -37,8 +65,9 @@ const DonersList = () => {
         height={430}
         width={360}
         itemSize={150}
-        itemCount={20}
+        itemCount={doners.length}
         overscanCount={5}
+        itemData={{ doners }}
       >
         {renderRow}
       </FixedSizeList>

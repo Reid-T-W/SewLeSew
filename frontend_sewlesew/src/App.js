@@ -24,10 +24,10 @@ import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <DynamicContextProvider>
-      {/* <ToastContainer 
+      <ToastContainer 
         position="top-center"
         closeOnClick
-      /> */}
+      />
       <BrowserRouter>
       <Navbar/>
       <Box sx={{ backgroundColor: '#FFFFFF', mt: "100px"}}>

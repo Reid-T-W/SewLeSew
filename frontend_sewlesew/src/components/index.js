@@ -33,3 +33,5 @@ export { default as PostDetailHeader } from './PostDetailHeader';
 export { default as DonersList } from './DonersList'
 export { default as Doner } from './Doner'
 export { default as Dropzone } from './Dropzone'
+export { default as DropzoneVideo } from './DropzoneVideo'
+export { default as StandardVideoListToPost } from './StandardVideoListToPost'

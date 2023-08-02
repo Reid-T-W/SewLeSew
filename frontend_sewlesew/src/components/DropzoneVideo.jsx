@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { StandardImageListToPost } from '.'
+import { StandardImageListToPost, StandardVideoListToPost } from '.'
 import { useDynamic } from '../contexts/DynamicContext';
 import { Typography } from '@mui/material';
 
 const Dropzone = () => {
-  const { files, setFiles } = useDynamic()
+  const { videoFiles, setVideoFiles } = useDynamic()
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles?.length) {
-        setFiles(previousFiles => [
+        setVideoFiles(previousFiles => [
             ...previousFiles,
             ...acceptedFiles.map(file =>
-                Object.assign(file, { img: URL.createObjectURL(file), title: file.name })
+                Object.assign(file, { video: URL.createObjectURL(file), title: file.name })
             )
         ])
     }
@@ -20,7 +20,7 @@ const Dropzone = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop,
     accept: {
-        'image/*': []
+        'video/*': []
     }
 })
 
@@ -31,15 +31,15 @@ const Dropzone = () => {
         )}>
             <input {...getInputProps()} />
             {isDragActive ? (
-                <p>Drop the images here ...</p>
+                <p>Drop the video here ...</p>
             ) : (
-                <p>Drag and drop some images here, or click to select files</p>
+                <p>Drag and drop the video here, or click to select file</p>
             )}
         </div>
         <Typography variant="subtitle" component="div" sx={{ flexGrow: 1 }}>
-            {files && <span class="gray-color logo" >Accepted Images</span>}
+            {videoFiles && <span class="gray-color logo" >Accepted Video</span>}
         </Typography>
-        { files.length !== 0 && <StandardImageListToPost height={250}/>}
+        { videoFiles.length !== 0 && <StandardVideoListToPost height={250}/>}
     </form>
   )
 }

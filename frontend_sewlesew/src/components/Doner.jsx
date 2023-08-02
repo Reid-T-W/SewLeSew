@@ -1,25 +1,35 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
+import { Avatar, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material'
 import React from 'react'
+import { useDynamic } from '../contexts/DynamicContext'
+import { currencyFormat } from '../utils/currencyFormatter'
+import { dateTime } from '../utils/dateTimeFormatter'
 
-const Doner = () => {
+const Doner = ({doner}) => {
   return (
     <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+           */}
+           <Avatar>{doner.User.username.slice(0, 2).toUpperCase()}</Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary="Brunch this weekend?"
+          primary=<Typography>{currencyFormat(doner.amount)}</Typography>
           secondary={
             <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Ali Connors
-              </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
+              <Stack>
+                <Typography
+                  sx={{ display: 'inline' }}
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
+                >
+                  {`${doner.User.firstName} ${doner.User.lastName}`}
+                </Typography>
+                <Typography variant='string'>
+                  {dateTime(doner.createdAt)}
+                </Typography>
+                
+              </Stack>
             </React.Fragment>
           }
         />

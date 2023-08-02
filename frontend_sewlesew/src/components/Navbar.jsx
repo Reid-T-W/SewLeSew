@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { Avatar } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import { getUserData } from '../utils/getUserData';
 
 const Navbar = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -33,8 +34,54 @@ const Navbar = () => {
           setSessionToken,
           setUsername,
           username,
-          profilePic
+          profilePic,
+          userPendingDonations,
+          setUserPendingDonations,
+          setNotificationsCount,
+          pendingDonationCounter,
         } = useDynamic();
+
+    // Lifecycle hook
+    const fetchUserPendingDonations = async () => {
+    const url = 'http://localhost:5000/api/v1/users/pending-donations';
+    const headers = {"session_id": sessionToken};
+    await getUserData(url, headers)
+    .then((response) => {
+      setUserPendingDonations(response.data);
+    })
+    .catch((error) => { alert(error) });
+  }
+  
+  useEffect(() => {
+    fetchUserPendingDonations()
+  },[pendingDonationCounter, isLoggedIn])
+  
+  // Saving userDonations to session storage
+  useEffect(() => {
+    userPendingDonations? sessionStorage.setItem('userPendingDonations', JSON.stringify(userPendingDonations)) : sessionStorage.setItem('userPendingDonations', []);
+  }, [userPendingDonations]);
+
+  useEffect(() => {
+    userPendingDonations? sessionStorage.setItem('pendingdonationsCount', JSON.stringify(pendingdonationsCount)) : sessionStorage.setItem('pendingdonationsCount', 0);
+  }, [pendingdonationsCount]);
+
+
+  // Reseting the pending donations counter to zero, if their are no pending donations
+  useEffect(() => {
+    let length_userPendingDonations = userPendingDonations? userPendingDonations.length : 0;
+    if (length_userPendingDonations === 0) {
+      // resetPendingdonationsCount();
+      setNotificationsCount(0); 
+    }
+    else {
+      setNotificationsCount(length_userPendingDonations);
+    }
+    // if (pendingdonationsCount === 0) {
+    //   resetPendingdonationsCount();
+    // }
+  }, [userPendingDonations])
+  
+  // pendingdonationsCount
   
   // Retrieving from session storage
   useEffect(() => {
@@ -138,7 +185,8 @@ const displayNotificationCount = () => {
   if (isLoggedIn) {
     return (
       <>
-        <p id="pending-donations-count">{ pendingdonationsCount }</p>
+        {/* <p id="pending-donations-count">{ pendingdonationsCount }</p> */}
+        <p id="pending-donations-count">{ notificationsCount }</p>
       </>
     )
   }
@@ -173,7 +221,8 @@ const displayNotificationCount = () => {
           </Button> */}
           
           {isLoggedIn ? 
-            <Button onClick={()=>{resetPendingdonationsCount()}}>
+            // <Button onClick={()=>{resetPendingdonationsCount()}}>
+            <Button>
               <NavLink style={navLinkStyle} to='/userpendingdonations'> 
                 <VolunteerActivismIcon color="secondary"/>
               </NavLink>

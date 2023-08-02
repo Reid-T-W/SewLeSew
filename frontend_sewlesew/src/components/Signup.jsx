@@ -27,8 +27,12 @@ const Signup = () => {
         const url = 'http://localhost:5000/api/v1/register';
         const data = { email, password, confirmPassword, username, firstName, lastName, role}
         return (await postToAPI(url, data)
-        .then((response) => { toast.success(response.data) })
-        .catch((error) => { toast(String(error)) }))
+        .then((response) => { 
+                             toast.success(response.data) 
+                            })
+        .catch((error) => { 
+                            toast(String(error))
+                          }))
     }
     const paperStyle={padding :20, height:'80vh', width:280, margin:"20px auto"}
     const avatarStyle={backgroundColor:'#5800FF'}

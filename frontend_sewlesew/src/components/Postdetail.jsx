@@ -13,15 +13,14 @@ const Postdetail= () => {
   const { 
           postDetails,
           setPostDetails,
+          doners
         } = useDynamic();
 
   // Lifecycle hook
   useEffect(() => {
-    console.log("in heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeere")
     // Retrieving from session storage
     fetchFromAPI(`http://localhost:5000/api/v1/posts/${postId}`)
     .then((data) => {
-      console.log(data)
       setPostDetails(data);
     })
     },[]);
@@ -47,7 +46,7 @@ const Postdetail= () => {
           alignItems={'center'}
         >
           <Typography margin='auto' color='#9c27b0' variant='h6'>
-            10 donations
+            {doners.length} donations
           </Typography>
         </Box>
         <DonersList />

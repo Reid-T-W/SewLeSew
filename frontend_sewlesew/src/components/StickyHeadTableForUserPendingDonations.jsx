@@ -113,6 +113,8 @@ export default function StickyHeadTableForUserPendingDonations() {
     setUsername,
     userPendingDonations,
     setUserPendingDonations,
+    isLoggedIn,
+    pendingDonationCounter,
     } = useDynamic();
 
   // // Lifecycle hook
@@ -132,19 +134,26 @@ export default function StickyHeadTableForUserPendingDonations() {
   //   posts
   // } = useDynamic();
 
-    // Lifecycle hook
-    const fetchUserPendingDonations = async () => {
-      const url = 'http://localhost:5000/api/v1/users/pending-donations';
-      const headers = {"session_id": sessionToken};
-      await getUserData(url, headers)
-      .then((response) => {
-        setUserPendingDonations(response.data);
-      })
-      .catch((error) => { alert(error) });
-    }
-    useEffect(() => {
-      fetchUserPendingDonations()
-      },[])
+  // Fetching user pending donations from api
+  // // Lifecycle hook
+  // const fetchUserPendingDonations = async () => {
+  //   const url = 'http://localhost:5000/api/v1/users/pending-donations';
+  //   const headers = {"session_id": sessionToken};
+  //   await getUserData(url, headers)
+  //   .then((response) => {
+  //     setUserPendingDonations(response.data);
+  //   })
+  //   .catch((error) => { alert(error) });
+  // }
+  
+  // useEffect(() => {
+  //   fetchUserPendingDonations()
+  // },[pendingDonationCounter, isLoggedIn])
+
+  // // Saving userDonations to session storage
+  // useEffect(() => {
+  //   sessionStorage.setItem('userPendingDonations', JSON.stringify(userPendingDonations));
+  // }, [userPendingDonations]);
 
   const rows = userPendingDonations.map((userPendingDonation) => {
     return createData(userPendingDonation.id,

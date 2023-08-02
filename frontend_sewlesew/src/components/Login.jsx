@@ -29,24 +29,33 @@ const Login = () => {
         setFirstName,
         setLastName,
         profilePic,
-        setProfilePic } = useDynamic();
+        setProfilePic,
+        firstName,
+        lastName,
+        email} = useDynamic();
 
     const loginUser = async() => {
         const url = 'http://localhost:5000/api/v1/login';
         const data = { username, password }
         return (await postToLoginAPI(url, data)
-        .then((response) => {
+        .then(async (response) => {
             // Get the session token from the response
             setIsLoggedIn(true)
             // Save the session_id to a state
             setSessionToken(response.session_id);
             toast.success(response.data)
             // Setting profile details
-            setUsername(response.userData.username);
-            setFirstName(response.userData.firstName);
-            setLastName(response.userData.lastName);
-            setEmail(response.userData.email);
-            setProfilePic(response.userData.profilePic)
+            await setUsername(response.userData.username);
+            await setFirstName(response.userData.firstName);
+            await setLastName(response.userData.lastName);
+            await setEmail(response.userData.email);
+            await setProfilePic(response.userData.profilePic);
+
+            await sessionStorage.setItem('username', response.userData.username);
+            await sessionStorage.setItem('firstName', response.userData.firstName);
+            await sessionStorage.setItem('lastName', response.userData.lastName);
+            await sessionStorage.setItem('email', response.userData.email);
+
             navigateToPostsFeed();
             // Redirect to postfeeds page
             // const history = useHistory();
@@ -56,6 +65,19 @@ const Login = () => {
             toast.error(String(error));
         }))
     }
+
+    useEffect(() => {
+        sessionStorage.setItem('username', username);
+    }, [isLoggedIn, username]);
+    useEffect(() => {
+        sessionStorage.setItem('firstName', firstName);
+    }, [isLoggedIn, firstName]);
+    useEffect(() => {
+        sessionStorage.setItem('lastName', lastName);
+    }, [isLoggedIn, lastName]);
+    useEffect(() => {
+        sessionStorage.setItem('email', email);
+    }, [isLoggedIn, email]);
 
     // useEffect(() => {
     //     sessionStorage.setItem('sessionToken', JSON.stringify(sessionToken));

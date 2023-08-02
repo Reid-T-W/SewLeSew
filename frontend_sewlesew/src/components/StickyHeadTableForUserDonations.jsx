@@ -105,10 +105,10 @@ export default function StickyHeadTableForUserDonations() {
 
   const rows = userDonations.map((userDonation) => {
     return createData(userDonation.id,
-                      userDonation.Post.title,
-                      userDonation.Post.category,
+                      userDonation?.Post?.title,
+                      userDonation?.Post?.category,
                       userDonation.amount,
-                      `${Math.floor((userDonation.Post.totalRaised / userDonation.Post.amount) * 100)} %`,
+                      `${Math.floor((userDonation?.Post?.totalRaised / userDonation?.Post?.amount) * 100)} %`,
                       options)
   })
   // const rows = [
