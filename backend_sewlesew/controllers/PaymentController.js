@@ -92,7 +92,12 @@ app.get('/', (req, res) => {
 // initial payment endpoint
 class PaymentController {
    // Payment Endpoint
+
+    static sessionToken = null;
     static async payViaChapa(req, res) {
+        PaymentController.sessionToken = req.headers.session_id
+        // Extracting the session id, so that it can be used in verify payment
+        // this.sessionToken = req.headers.session_id;
          // chapa redirect you to this url when payment is successful
         const CALLBACK_URL = "http://localhost:5000/api/v1/verify-payment/"
         const RETURN_URL = "http://localhost:5000/api/v1/payment-success/"
@@ -138,16 +143,31 @@ class PaymentController {
     // Verification endpoint
     static async verifyPayment(req, res) {
         //verify the transaction
-        console.log(req.params.id)
         await axios.get("https://api.chapa.co/v1/transaction/verify/" + req.params.id, config)
-            .then((response) => {
+            .then(async (response) => {
                 console.log("Payment was successfully verified")
+                // Transfer all pending donations to complete donations
+
+                // Get the user making the donation
+                // const sessionToken = req.headers.session_id;
+
+                // Create a header for the session token
+                const headers = {
+                    session_id: PaymentController.sessionToken
+                }
+
+                // Make an api call to transfer all pending donations to complete donations
+                await axios.get("http://localhost:5000/api/v1/pending-donations/transfer", {headers: headers})
+                .then((response) => {
+                    console.log("Pending donations transferred successfully")
+                }).catch((err) => console.log("Pending donations transfer failed", err))
             }) 
             .catch((err) => console.log("Payment can't be verfied", err))
     }
 
     static async paymentSuccess(req, res) {
-      res.redirect("http://localhost:3000/userpendingdonations/")
+    //   res.redirect("http://localhost:3000/userpendingdonations/")
+    res.redirect("http://localhost:3000/userdonations/")
     }
 }
 // app.listen(PORT, () => console.log("Server listening on port:", PORT))

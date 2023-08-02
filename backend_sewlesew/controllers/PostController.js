@@ -73,7 +73,7 @@ class PostController {
     if (!amount) {
       return res.status(400).json({ error: 'Missing amount' });
     }
-    if (!totalRaised) {
+    if (totalRaised === null) {
       return res.status(400).json({ error: 'Missing totalRaised' });
     }
     if (!category) {
@@ -85,22 +85,7 @@ class PostController {
     if (titleUnderUser) {
       return res.status(400).json({ error: 'Post already exists' });
     }
-    // // Uploading files to cloudinary
-    // const resultPicture = await cloudinary.uploader.upload(pictureFile,{
-    //   folder: "pictures",
-    //   // width: 300,
-    //   // crop: "scale"
-    // })
-    // const resultVideo = await cloudinary.uploader.upload(videoFile,{
-    //   folder: "vidoes",
-    //   // width: 300,
-    //   // crop: "scale"
-    // })
-    // const resultDocuments = await cloudinary.uploader.upload(documentFile,{
-    //   folder: "documents",
-    //   // width: 300,
-    //   // crop: "scale"
-    // })
+
     // Save the post to DB
     try {
       const dbPost = await registerPost({
@@ -111,21 +96,40 @@ class PostController {
         category,
         UserId: dbUser.id,
       });
+      
+      let picturesList = []
       if (pictureFile) {
-        const dbPicture = await registerPictureForPost({
-          pictureFile,
-          // public_id: resultPicture.public_id,
-          // url: resultPicture.secure_url
-        });
-        dbPicture.setPost(dbPost);
+        for (let pic in pictureFile) {
+          picturesList.push({PostId: dbPost.id, pictureFile: pictureFile[pic]})
+        }
+
+        // const dbPicture = await registerPictureForPost({
+        //     PostId: dbPost.id,
+        //     pictureFile 
+        // });
+        console.log("Over here")
+        console.log('picturesList', picturesList)
+        const dbPicture = await registerPictureForPost(
+          picturesList
+        )
+        console.log(dbPicture)
       }
       if (videoFile) {
-        const dbVideo = await registerVideoForPost({
-          videoFile,
-          // public_id: resultVideo.public_id,
-          // url: resultVideo.secure_url
-        });
-        dbVideo.setPost(dbPost);
+        let videoList = []
+        for (let video in videoFile) {
+          videoList.push({PostId: dbPost.id, videoFile: videoFile[video]})
+        }
+        console.log("In save video ", videoList)
+        const dbVideo = await registerVideoForPost(
+          videoList
+        )
+        console.log(dbVideo)
+        // const dbVideo = await registerVideoForPost({
+        //   videoFile,
+        //   // public_id: resultVideo.public_id,
+        //   // url: resultVideo.secure_url
+        // });
+        // dbVideo.setPost(dbPost);
       }
       if (documentFile) {
         const dbDocument = await registerDocumentForPost({
@@ -133,10 +137,12 @@ class PostController {
           // public_id: resultDocuments.public_id,
           // url: resultDocuments.secure_url
         });
-        dbDocument.setPost(dbPost);
+        await dbDocument.setPost(dbPost);
       }
       return res.status(201).json({ message: `Post titled ${ dbPost.title } successfully registered` });
     } catch (error) {
+      console.log("Error")
+      console.log(error)
       return res.status(400).json({ error: "Error during registration" });
     }
   }
@@ -298,11 +304,12 @@ class PostController {
     await deletePendingDonationByParam({ id: pendingDonationId });
 
     // Add the donation to the post
-    dbDonation.setPost(dbPost);
+    await dbDonation.setPost(dbPost);
     // Add the donation to the user
-    dbDonation.setUser(dbUser);
+    await dbDonation.setUser(dbUser);
     // Get sum of donations for this post
     const sumOfAllDonationsForPost = await sumDonationsByPost(dbPost.id)
+    console.log("sumDonationsByPost ", sumOfAllDonationsForPost, amount)
 
     // Increment the value of totalRaised for Post
     await updatePostByParam( {totalRaised: sumOfAllDonationsForPost}, { id:dbPost.id });
@@ -344,8 +351,8 @@ class PostController {
     const dbPendingDonation = await addPendingDonation({
       amount,
     })
-    dbPendingDonation.setPost(dbPost);
-    dbPendingDonation.setUser(dbUser);
+    await dbPendingDonation.setPost(dbPost);
+    await dbPendingDonation.setUser(dbUser);
     return res.status(201).json({ message: `${ amount } successfully added to pending donations` });
   }
 
@@ -420,6 +427,69 @@ class PostController {
       return res.status(400).json({ error });
     }
   }
+
+
+  // Transfer pending donations of a user to completed donations table
+  static async transferPendingDonations(req, res) {
+    // console.log("In hereeeeeeeeeeeeeeeeeeeeee")
+    // Get user from session token
+    const sessionToken = req.headers.session_id;
+
+    if (!sessionToken) {
+      return res.status(400).json({ error: 'Please Login First' });
+    }
+
+    const dbUser = await getUserByParam({ sessionToken });
+    if (!dbUser) { 
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    // Get all pending donations of the user
+    const dbPendingDonations = await getAllPendingDonationsByParam({ UserId: dbUser.id });
+
+    // Add each pending donation to the completed donations table
+    // for (let j = 0; j < dbPendingDonations.length; j++) {
+    //   const amount = dbPendingDonations[j].amount;
+    //   const dbDonation = await addDonation({
+    //     amount,
+    //   })
+
+    dbPendingDonations.forEach(async (dbPendingDonation) => {
+      const postId = dbPendingDonation.PostId;
+      const amount = dbPendingDonation.amount;
+      const dbDonation = await addDonation({  
+        amount,
+      })
+
+      // Get the post associated with the pending donation
+      const dbPost = await getPostByParam({ id: postId });
+      if (!dbPost) {
+        return res.status(400).json({ error: 'Post not found' });
+      }
+   
+      // Delete the pending donation from the pending donations table
+      await deletePendingDonationByParam({ id: dbPendingDonation.id });
+
+      // Add the donation to the user
+      await dbDonation.setUser(dbUser);
+
+      // Add the donation to the post
+      await dbDonation.setPost(dbPost);
+
+      // Get sum of donations for this post
+      const sumOfAllDonationsForPost = await sumDonationsByPost(dbPost.id)
+      // console.log("sumDonationsByPost ", sumOfAllDonationsForPost, amount)
+
+      // Increment the value of totalRaised for Post
+      await updatePostByParam( {totalRaised: sumOfAllDonationsForPost}, { id:dbPost.id });
+    });
+    return res.status(201).json({ message: `Donation Successfull` });
+  }
+
+
+  // Delete the two lines below, for reference purpose only
+  // const url = 'http://localhost:5000/api/v1/users/pending-donations';
+  // const headers = {"session_id": sessionToken};
 }
 
 module.exports = PostController;

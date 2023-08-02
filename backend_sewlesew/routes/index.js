@@ -120,7 +120,9 @@ router.get('/api/v1/verify-payment/:id', PaymentController.verifyPayment);
 
 router.get('/api/v1/payment-success', PaymentController.paymentSuccess);
 
-
 // Delete Individual Pending Donation
 router.delete('/api/v1/pending-donations/:id', PostController.deletePendingDonation);
+
+// Transfer pending dontation to completed donation
+router.get('/api/v1/pending-donations/transfer', PostController.transferPendingDonations);
 module.exports = router;

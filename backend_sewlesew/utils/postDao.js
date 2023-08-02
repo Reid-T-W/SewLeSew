@@ -33,29 +33,40 @@ async function getPostByParam(param) {
     include: [ models.Picture,
       models.User,
       models.Video,
-      models.Document]
+      models.Document,
+      models.CompletedDonation]
   });
   return dbPosts;
 }
 
 async function registerPost(dict) {
+  console.log("In postDao registerPost line 42")
   const post = await models.Post.create(
     dict
     );
+    console.log("In postDao registerPost line 46", post)
   return post;
 }
 
-async function registerPictureForPost(dict) {
-  const picture = await models.Picture.create(
-    dict
-    );
-  return picture;
+async function registerPictureForPost(picturesList) {
+  // const picture = await models.Picture.create(
+  //   dict
+  //   );
+  const pictures = await models.Picture.bulkCreate(
+    picturesList
+  )
+  return pictures;
 }
 
-async function registerVideoForPost(dict) {
+async function registerVideoForPost(videoList) {
+  const dict = videoList[0]
+  // console.log("In postDao line 62 ", videoList, dict)
   const video = await models.Video.create(
     dict
-    );
+  );
+  // const videos = await models.Video.bulkCreate(
+  //   videoList
+  // )
   return video;
 }
 
