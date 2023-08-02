@@ -1,0 +1,7 @@
+[
+    {"name":"samsung_s3","quantity":50,"UserId":1},
+    {"name":"nokia","quantity":40,"UserId":2},
+    {"name":"samsung_tab","quantity":30,"UserId":3},
+    {"name":"iphone13","quantity":20,"UserId":4},
+    {"name":"xperia","quantity":10,"UserId":5}
+]
