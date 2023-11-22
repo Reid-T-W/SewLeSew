@@ -17,7 +17,7 @@ for donation, and doners can add donations to that post.
 
 ## To Do  
 - [ ] Implement Real time chat with doners and requesters  
-- [ ] Implemnet Q and A section  
+- [ ] Implemnet Q&A section  
 - [ ] Implement Full text search  
 ## Contributing  
 This project is open for contributions, feel free to send pull requests, it will really help if you are very clear and specific on what features you added or improved.
