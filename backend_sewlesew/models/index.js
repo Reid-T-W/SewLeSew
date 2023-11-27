@@ -9,10 +9,19 @@ const Document = require('./Document');
 
 const db = {};
 
-const sequelize = new Sequelize('wegene_admin', 'wegene_admin', '1234', {
-  host: 'localhost',
+require('dotenv').config();
+const DB_SCHEMA = process.env.DB_SCHEMA
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_HOST = process.env.DB_HOST
+const sequelize = new Sequelize(DB_SCHEMA, DB_USER, DB_PASSWORD, {
+  host: DB_HOST,
   dialect: 'postgres',
 });
+// const sequelize = new Sequelize('wegene_admin', 'wegene_admin', '1234', {
+//   host: 'db',
+//   dialect: 'postgres',
+// });
 
 module.exports = sequelize;
 const userModel = User(sequelize, Sequelize.DataTypes);

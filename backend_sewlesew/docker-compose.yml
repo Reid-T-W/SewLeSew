@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: wegene_admin
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: wegene_admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - sewlesew-db:/var/lib/postgresql/data
+
+  sewlesew:
+    build:
+      context: .
+    environment:
+      DB_SCHEMA: wegene_admin
+      DB_USER: wegene_admin
+      DB_PASSWORD: 1234
+      DB_HOST: db
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    command: sh -c "npm run production-populateDB && npm run start-server-production"
+volumes:
+  sewlesew-db:
