@@ -9,7 +9,7 @@ const router = require('./routes/index');
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:3000", "https://checkout.chapa.co"],
+    origin: ['http://localhost:3000', 'https://checkout.chapa.co', 'https://master--sew-le-sew.netlify.app/'],
     credentials: true
 }));
 
