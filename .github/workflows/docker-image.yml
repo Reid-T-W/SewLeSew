@@ -5,7 +5,7 @@ on:
   push:
     branches: ['master']
   pull_request:
-    branches: ['main']
+    branches: ['master']
 
 # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
 env:
@@ -40,7 +40,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./docker/Dockerfile
+          file: ./backend_sewlesew/Dockerfile
           build-args: |
             BUILD_BRANCH=${{ github.head_ref || github.ref_name }}
             VERSION=${{ github.ref_name }}.${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}-dev
