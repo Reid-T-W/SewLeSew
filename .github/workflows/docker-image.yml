@@ -36,11 +36,13 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Pull image from GitHub Container Registry
+        run: docker pull ghcr.io/reid-t-w/sewlesew:master-dev
       - name: Install Render CLI
         run: |
           curl -L https://render.com/cli/latest/render-linux-amd64 -o render
-          chmod +x render
           sudo mv render /usr/local/bin/render
+          sudo chmod +x /usr/local/bin/render
       - name: Deploy to Render
         run: |
           render login --token ${{ secrets.RENDER_AUTH_TOKEN }}
