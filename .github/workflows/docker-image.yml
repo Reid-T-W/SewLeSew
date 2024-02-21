@@ -46,3 +46,12 @@ jobs:
             VERSION=${{ github.ref_name }}.${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}-dev
           push: true
           tags: ${{ steps.meta.outputs.tags }}-dev
+        - name: Install Render CLI
+          run: |
+            curl -L https://render.com/cli/latest/render-linux-amd64 -o render
+            chmod +x render
+            sudo mv render /usr/local/bin/render
+        - name: Deploy to Render
+          run: |
+            render login --token ${{ secrets.RENDER_AUTH_TOKEN }}
+            render deploy --image ghcr.io/reid-t-w/sewlesew:master-dev --override
