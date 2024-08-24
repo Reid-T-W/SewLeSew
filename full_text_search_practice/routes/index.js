@@ -8,6 +8,7 @@ const router = Router()
 router.get('/api/v1/products', ProductController.getAllProducts)
 router.get('/api/v1/search/:query', ProductController.searchProducts)
 router.get('/api/v1/users', UserController.getAllUsers)
+router.post('/api/v1/products', ProductController.addProduct)
 
 
 

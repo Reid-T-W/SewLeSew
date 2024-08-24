@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }, {}
     )
 
+    Product.addHook('afterCreate', async (product, options) => {
+        return sequelize
+            .query('REFRESH MATERIALIZED VIEW products_users_joined;')
+            .then(() => {console.log("Materialized view refreshed")})
+    }),
+
     Product.getSearchVector = () => {
         return 'producttext';
     },
@@ -42,28 +48,28 @@ module.exports = (sequelize, DataTypes) => {
                     .catch((error) => console.log(error));
         })
 
-        // Function to refresh the materialized view
-        // Is executed only when run by a trigger
-        .then(function() {
-            return sequelize
-                    .query('CREATE OR REPLACE FUNCTION refresh_products_users_joined() \
-                        RETURNS TRIGGER LANGUAGE plpgsql \
-                        AS $$ \
-                        BEGIN \
-                            REFRESH MATERIALIZED VIEW CONCURRENTLY products_users_joined; \
-                            RETURN NULL; \
-                        END $$;')
-        })
+        // // Function to refresh the materialized view
+        // // Is executed only when run by a trigger
+        // .then(function() {
+        //     return sequelize
+        //             .query('CREATE OR REPLACE FUNCTION refresh_products_users_joined() \
+        //                 RETURNS TRIGGER LANGUAGE plpgsql \
+        //                 AS $$ \
+        //                 BEGIN \
+        //                     REFRESH MATERIALIZED VIEW CONCURRENTLY products_users_joined; \
+        //                     RETURN NULL; \
+        //                 END $$;')
+        // })
 
-        .then(function() {
-            return sequelize
-                    .query('DROP TRIGGER IF EXISTS product_vector_update ON Products CASCADE;')
-                    .then(() => {
-                        sequelize.query('CREATE TRIGGER product_vector_update BEFORE INSERT OR UPDATE ON "' + product_instance.tableName + '" FOR EACH ROW EXECUTE PROCEDURE refresh_products_users_joined();')
-                        .catch((error) => console.log(error));
-                    })
-                    .catch((error) => console.log(error));
-        })
+        // .then(function() {
+        //     return sequelize
+        //             .query('DROP TRIGGER IF EXISTS product_vector_update ON Products CASCADE;')
+        //             .then(() => {
+        //                 sequelize.query('CREATE TRIGGER product_vector_update BEFORE INSERT OR UPDATE ON "' + product_instance.tableName + '" FOR EACH ROW EXECUTE PROCEDURE refresh_products_users_joined();')
+        //                 .catch((error) => console.log(error));
+        //             })
+        //             .catch((error) => console.log(error));
+        // })
         .catch((error) => console.log(error));        
     },
 

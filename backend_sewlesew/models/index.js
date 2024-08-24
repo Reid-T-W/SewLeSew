@@ -6,8 +6,10 @@ const Video = require('./Video');
 const CompletedDonation = require('./CompletedDonation');
 const PendingDonation = require('./PendingDonation');
 const Document = require('./Document');
-
+const fs = require('fs');
+const path = require('path');
 const db = {};
+
 
 const sequelize = new Sequelize('wegene_admin', 'wegene_admin', '1234', {
   host: 'localhost',
@@ -39,5 +41,21 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+// // Bootstrap models
+// const models = {}
+// fs.readdirSync(__dirname).forEach(function (file) {
+//     if (~file.indexOf('.js') && file.indexOf('index.js') < 0) {
+//         // var model = sequelize.import(file);
+//         var model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
+//         models[model.name] = model;
+//     }
+// });
+
+sequelize.sync().then(async function() {
+    await db.Post.addFullTextIndex();
+    // await db.Post.addHook();
+});
+
 
 module.exports = db;

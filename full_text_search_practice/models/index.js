@@ -32,18 +32,22 @@ db.sequelize = sequelize
 db.Sequelize = Sequelize
 
 
-// Bootstrap models
-const models = {}
-fs.readdirSync(__dirname).forEach(function (file) {
-    if (~file.indexOf('.js') && file.indexOf('index.js') < 0) {
-        // var model = sequelize.import(file);
-        var model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
-        models[model.name] = model;
-    }
-});
+// // Bootstrap models
+// const models = {}
+// fs.readdirSync(__dirname).forEach(function (file) {
+//     if (~file.indexOf('.js') && file.indexOf('index.js') < 0) {
+//         // var model = sequelize.import(file);
+//         var model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
+//         models[model.name] = model;
+//     }
+// });
 
-sequelize.sync().then(function() {
-    models.Product.addFullTextIndex();
+// sequelize.sync().then(function() {
+//     models.Product.addFullTextIndex();
+// });
+sequelize.sync().then(async function() {
+    await db.Product.addFullTextIndex();
+    // await db.Post.addHook();
 });
 
 module.exports = db;

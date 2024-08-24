@@ -125,4 +125,7 @@ router.delete('/api/v1/pending-donations/:id', PostController.deletePendingDonat
 
 // Transfer pending dontation to completed donation
 router.get('/api/v1/pending-donations/transfer', PostController.transferPendingDonations);
+
+// Full text search
+router.get('/api/v1/search/:query', PostController.searchPosts)
 module.exports = router;

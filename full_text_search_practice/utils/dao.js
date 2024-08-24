@@ -34,10 +34,19 @@ async function searchProducts(query) {
     return searchedProducts;
 }
 
+async function addProduct(product) {
+    console.log(product)
+    const dbProduct = await models.Product.create(product)
+    .then(()=>{console.log("Product added Successsssssssssssssssssssssfully")})
+    .catch((err)=>{console.log(err)});
+    return dbProduct;
+}
+
 module.exports = {
     getAllProducts,
     getAllUsers,
     searchProducts,
     getProductByParam,
+    addProduct,
 }
 

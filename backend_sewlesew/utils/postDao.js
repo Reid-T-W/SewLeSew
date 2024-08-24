@@ -40,11 +40,11 @@ async function getPostByParam(param) {
 }
 
 async function registerPost(dict) {
-  console.log("In postDao registerPost line 42")
   const post = await models.Post.create(
     dict
-    );
-    console.log("In postDao registerPost line 46", post)
+    )
+  console.log("Printing post");
+  console.log(post);
   return post;
 }
 
@@ -92,6 +92,12 @@ async function deletePostByParam(param) {
     });
 }
 
+async function searchPosts(query) {
+  const searchedPosts = await models.Post.search(query);
+  return searchedPosts;
+}
+
+
 module.exports = { getPostByParam,
                    registerPost,
                    registerPictureForPost,
@@ -100,4 +106,5 @@ module.exports = { getPostByParam,
                    updatePostByParam,
                    deletePostByParam,
                    getAllPostsByParam,
-                   getAllPosts };
+                   getAllPosts,
+                   searchPosts };

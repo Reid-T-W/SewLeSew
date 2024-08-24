@@ -1,4 +1,4 @@
-const { getAllProducts, searchProducts, getProductByParam } = require('../utils/dao');
+const { getAllProducts, searchProducts, getProductByParam, addProduct } = require('../utils/dao');
 
 class ProductController {
     static async getAllProducts(req, res) {
@@ -20,6 +20,13 @@ class ProductController {
         }
         // const products = await getSearchedProducts(searchedProducts[0]);
         return res.status(200).json(products);
+    }
+
+    static async addProduct(req, res) {
+        const { name, description, price, quantity } = req.body;
+        // 2 represents the default user id
+        const product = await addProduct({name, description, price, quantity, "UserId":2});
+        return res.status(200).json(product);
     }
 } 
 

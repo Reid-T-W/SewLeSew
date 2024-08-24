@@ -19,6 +19,13 @@ module.exports = (sequelize, DataTypes) => {
     //   allowNull: false,
     // },
   }, {});
+
+  Document.addHook('afterCreate', async (post, options) => {
+    return sequelize
+            .query('REFRESH MATERIALIZED VIEW posts_users_joined;')
+            .then(() => {console.log("Materialized view refreshed")})
+  }),
+
   Document.associate = (models) => {
     Document.belongsTo(models.Post);
   };

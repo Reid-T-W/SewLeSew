@@ -14,7 +14,8 @@ const {
   updatePostByParam,
   deletePostByParam,
   getAllPostsByParam, 
-  getAllPosts } = require('../utils/postDao');
+  getAllPosts,
+  searchPosts } = require('../utils/postDao');
 const { 
   addPendingDonation,
   getAllPendingDonations,
@@ -377,7 +378,19 @@ class PostController {
   // }
 
   static async searchPosts(req, res) {
-
+    // Extracting the query from the req object
+    const { query } = req.params;
+    console.log(query)
+    // const query = "30 samsung"
+    const searchedPosts = await searchPosts(query);
+    // console.log(searchedProducts[0])
+    let posts = []
+    for (let postId of searchedPosts[0]) {
+        const post = await getPostByParam(postId);
+        posts.push(post)
+    }
+    // const products = await getSearchedProducts(searchedProducts[0]);
+    return res.status(200).json(posts);
   }
 
   static async searchDonations(req, res) {
