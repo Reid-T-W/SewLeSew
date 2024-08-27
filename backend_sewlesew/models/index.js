@@ -10,11 +10,17 @@ const fs = require('fs');
 const path = require('path');
 const db = {};
 
+const dotenv = require('dotenv');
 
-const sequelize = new Sequelize('wegene_admin', 'wegene_admin', '1234', {
-  host: 'localhost',
-  dialect: 'postgres',
-});
+dotenv.config();
+
+
+const sequelize = new Sequelize(process.env.DATABASE,
+                                process.env.DB_USERNAME,
+                                process.env.PASSWORD, {
+                                  host: process.env.HOST,
+                                  dialect: process.env.DB_DIALECT,
+                                });
 
 module.exports = sequelize;
 const userModel = User(sequelize, Sequelize.DataTypes);
