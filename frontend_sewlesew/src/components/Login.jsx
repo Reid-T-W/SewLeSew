@@ -91,7 +91,7 @@ const Login = () => {
                 <Stack gap='20px'>
                     <Grid  align='center'>
                         <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
-                        <h2>Sign In</h2>
+                        <h2>Sign In ...</h2>
                     </Grid>
                     <TextField onChange={ (e)=>{ setUsername(e.target.value) } } label='Username' placeholder='Enter username' fullWidth required/>
                     <TextField onChange={ (e)=>{ setPassword(e.target.value) } } label='Password' placeholder='Enter password' type='password' fullWidth required/>
